@@ -5,9 +5,9 @@ public class Element {
 	private String name;
 	private String abbrev;
 	private int atomNum;
-	private int coefficient;
+	private double coefficient;
 	
-	public Element(String name, String abbrev, int atomNum, int coefficient){
+	public Element(String name, String abbrev, int atomNum, double coefficient){
 		this.name = name;
 		this.abbrev = abbrev;
 		this.atomNum = atomNum;
@@ -38,11 +38,15 @@ public class Element {
 		this.atomNum = atomNum;
 	}
 	
-	public int getCoefficient(){
+	public double getCoefficient(){
 		return coefficient;
 	}
 	
-	public void setCoefficient(int coefficient){
+	public void setCoefficient(double coefficient){
 		this.coefficient = coefficient;
+	}
+	
+	public boolean isEqual(String abbrev){
+		return this.abbrev.equalsIgnoreCase(abbrev) ? true : false;
 	}
 }
