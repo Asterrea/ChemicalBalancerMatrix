@@ -136,7 +136,7 @@ public class GUI_HOME extends JPanel {
 	  txtAreaInstructions.setDisabledTextColor(Color.BLACK);
 	  txtAreaInstructions.setText("Instructions:\n\n"
 	  		+ "No Spaces.\n"
-	  		+ "All Elements must have corresponding coefficients.\n"
+	  		+ "All Elements must have corresponding atomic values.\n"
 	  		+ "Don't forget to put 1 accordingly.\n\n"
 	  		+ "Enter the Equations in this format:\n"
 	  		+ "\t\tMg1O1+Fe1 = Fe2O3+Mg1\n\n"
