@@ -10,6 +10,7 @@ public class Equation {
 	private ArrayList<Compound> compounds = new ArrayList<Compound>();	// Get chemical compounds
 	private ArrayList<Element> elements = new ArrayList<Element>(); // Get all elements from the equation
 	private double[][] matrix;
+	private Matrix operations;
 	
 	/* Note: Right equation has negative coefficients */
 	public Equation(String leftEquation, String rightEquation){
@@ -110,13 +111,11 @@ public class Equation {
 			}
 		}
 		
-		for (int i = 0; i < elements.size(); i++){
-			System.out.print("|");
-			for(int j = 0; j < compounds.size() + 1; j++){
-				System.out.print(matrix[i][j] + " ");
-			}
-			System.out.println("|");
-		}
+		/* Perform Gauss Jordan Reduction */
+		operations = new Matrix(matrix);
+		operations.reduceMatrix();
+		operations.printMatrix();
+		
 	}
 	
 }
