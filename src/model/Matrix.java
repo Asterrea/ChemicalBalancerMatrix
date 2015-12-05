@@ -37,6 +37,20 @@ public class Matrix {
         DATA[ROWS] = DATA[COLS];
         DATA[COLS] = temp;
     }
+    
+    //Multiplies a specified row by a specified factor
+    private void multiplyRow(int ROWS, double factor) {
+    	for(int i = 0; i < COLS; i++) {
+    		DATA[ROWS][i] *= factor;
+    	}
+    }
+    
+    //Adds a source row multiplied by a factor to the destination row
+    private void addRow(int source, int destination, double factor) {
+    	for(int i = 0; i < COLS; i++) {
+    		DATA[destination][i] += DATA[source][i] * factor;
+    	}
+    }
 
     // Transpose calling Matrix
     public Matrix transpose() {
@@ -102,19 +116,37 @@ public class Matrix {
 		return DATA;
     }
     
-    //reduce matrix via Gaussian Elimination
-    // Source of algorithm: http://www.engineering.ucsb.edu/~hpscicom/projects/gauss/introge.pdf
+    //reduce matrix via Gauss-Jordan Reduction
     public void reduceMatrix() {
-    	//check if the matrix is a square matrix
-    	if(ROWS == COLS) {
-    		for(int i = 1; i < ROWS; i++) {
-        		for(int j = i + 1; j <= ROWS; j++) {
-        			DATA[j][i] = DATA[j][i]/DATA[i][i];
-        			for(int k = i + 1; k <= ROWS + 1; k++) {
-        				DATA[j][k] = DATA[j][k] - DATA[j][i] * DATA[i][k];
-        			}
-        		}
-        	}
+    	int numPivots = 0;
+    	for(int j = 0; j < COLS; j++) {
+    		int pivotRow = numPivots;
+    		while(pivotRow < ROWS && DATA[pivotRow][j] == 0.0) 
+    			pivotRow++;
+    		if(pivotRow == ROWS)
+    			continue;
+    		swap(numPivots,pivotRow);
+    		pivotRow = numPivots;
+    		numPivots++;
+    		multiplyRow(pivotRow, 1.0/DATA[pivotRow][j]);
+    		for(int i = pivotRow + 1; i < ROWS; i++) 
+    			addRow(pivotRow,i,-DATA[i][j]);
+    	}
+    	
+    	for(int i = ROWS - 1; i >= 0; i--) {
+    		int pivotCol = 0;
+    		while(pivotCol < COLS && DATA[i][pivotCol] == 0) 
+    			pivotCol++;
+    		if(pivotCol == COLS)
+    			continue;
+    		for(int j = i - 1; j >= 0; j--) 
+    			addRow(i,j,-DATA[j][pivotCol]);
+    	}
+    }
+    
+    private void pivot(int row, int col) {
+    	for(int i = 0; i < COLS; i++) {
+    		double a = DATA[i][col]/DATA[row][col];
     	}
     }
     
