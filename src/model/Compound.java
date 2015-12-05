@@ -5,7 +5,8 @@ import java.util.ArrayList;
 /* Get each chemical compound */
 public class Compound {
 	
-	ArrayList<Element> elements = new ArrayList<Element>();
+	private ArrayList<Element> elements = new ArrayList<Element>();
+	private double multiplier = 0;
 	
 	public Compound(String compound){
 		storeElements(compound);
@@ -13,7 +14,7 @@ public class Compound {
 	
 	public void storeElements(String compound){
 		String element = "";
-		int coefficient = 0;
+		double coefficient = 0;
 		
 		/* Get first character of the string */
 		element += compound.charAt(0);
@@ -52,6 +53,18 @@ public class Compound {
 		for (int i = 0; i < elements.size(); i++){
 			elements.get(i).setCoefficient(elements.get(i).getCoefficient() * -1);
 		}
+	}
+	
+	public ArrayList<Element> getCompoundElements(){
+		return elements;
+	}
+	
+	public double getMultiplier(){
+		return multiplier;
+	}
+	
+	public void setMultiplier(int multiplier){
+		this.multiplier = multiplier;
 	}
 	
 }
