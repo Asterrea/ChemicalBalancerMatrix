@@ -177,6 +177,7 @@ public class Equation {
 					toGCF = true;
 				}
 			}
+			compounds.get(elements.size()).setMultiplier(1);
 		}
 		
 		if (toGCF == true){
@@ -194,6 +195,7 @@ public class Equation {
 				compounds.get(i).setMultiplier(compounds.get(i).getMultiplier() * gcf);
 			}
 		}
+		System.out.println(getLeftEquation() + " = " + getRightEquation());
 	}
 	
 	public String getLeftEquation(){
