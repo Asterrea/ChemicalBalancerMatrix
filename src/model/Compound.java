@@ -6,10 +6,22 @@ import java.util.ArrayList;
 public class Compound {
 	
 	private ArrayList<Element> elements = new ArrayList<Element>();
+	private String compound;
+	private String side;
 	private double multiplier = 0;
 	
-	public Compound(String compound){
+	public Compound(String compound, String side){
+		this.compound = compound;
+		this.side = side;
 		storeElements(compound);
+	}
+	
+	public String getSide(){
+		return side;
+	}
+	
+	public String getCompound(){
+		return compound;
 	}
 	
 	public void storeElements(String compound){
@@ -63,7 +75,7 @@ public class Compound {
 		return multiplier;
 	}
 	
-	public void setMultiplier(int multiplier){
+	public void setMultiplier(double multiplier){
 		this.multiplier = multiplier;
 	}
 	
