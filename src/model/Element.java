@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 /* Class to get a chemical element */
 public class Element {
 	private String name;
@@ -48,5 +50,5 @@ public class Element {
 	
 	public boolean isEqual(String abbrev){
 		return this.abbrev.equalsIgnoreCase(abbrev) ? true : false;
-	}
+	}         
 }
