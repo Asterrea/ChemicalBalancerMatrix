@@ -119,15 +119,34 @@ public class GUI_HOME extends JPanel {
   
   private void showInstructions(){
 	  txtAreaInstructions.setVisible(true);
+	  setInstructions();
   }
   
   private void hideInstructions(){
 	  txtAreaInstructions.setVisible(false);
   }
   
+  private void showAboutDialog(){
+
+	  JOptionPane.showMessageDialog(null,"CREATORS: \nDY, AAKOV \nMENDOZA, MA.THERESA \nUNABIA,KARL"
+	  		+ "\n\nDecember 6, 2015");
+  }
+  
+  private void setInstructions(){
+	  txtAreaInstructions.setDisabledTextColor(Color.BLACK);
+	  txtAreaInstructions.setText("Instructions:\n\n"
+	  		+ "No Spaces.\n"
+	  		+ "All Elements must have corresponding coefficients.\n"
+	  		+ "Don't forget to put 1 accordingly.\n\n"
+	  		+ "Enter the Equations in this format:\n"
+	  		+ "\t\tMg1O1+Fe1 = Fe2O3+Mg1\n\n"
+	  		+ "Invalid:\n"
+	  		+ "\t\tMgO+Fe = Fe2O3+Mg");
+  }
   public void showListeners(){
 	  btnBegin.addActionListener(new BalanceActionListener());
 	  btnInstructions.addActionListener(new BalanceActionListener());
+	  btnAbout.addActionListener(new BalanceActionListener());
   }
   
   class BalanceActionListener implements ActionListener{
@@ -141,6 +160,9 @@ public class GUI_HOME extends JPanel {
 			hideBalance();
 			showInstructions();
 		}
+		else if(e.getSource().equals(btnAbout)){
+			showAboutDialog();
+		}
 		
 	}
 	  
@@ -151,8 +173,10 @@ public class GUI_HOME extends JPanel {
       frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
       frame.getContentPane().add (gui);
       frame.pack();
+      frame.setLocation(250,150);
       frame.setVisible (true);
       
       gui.showListeners();
+
   }
 }
