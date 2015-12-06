@@ -117,7 +117,7 @@ public class Matrix {
     }
     
     //reduce matrix via Gauss-Jordan Reduction
-    public void reduceMatrix() {
+    public double[][] reduceMatrix() {
     	int numPivots = 0;
     	for(int j = 0; j < COLS; j++) {
     		int pivotRow = numPivots;
@@ -142,6 +142,8 @@ public class Matrix {
     		for(int j = i - 1; j >= 0; j--) 
     			addRow(i,j,-DATA[j][pivotCol]);
     	}
+    	
+    	return DATA;
     }
     
     private void pivot(int row, int col) {
