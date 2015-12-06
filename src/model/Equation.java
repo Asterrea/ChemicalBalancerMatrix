@@ -10,6 +10,7 @@ public class Equation {
 	private ArrayList<Compound> compounds = new ArrayList<Compound>();	// Get chemical compounds
 	private ArrayList<Element> elements = new ArrayList<Element>(); // Get all elements from the equation
 	private double[][] matrix;
+	private double[][] newMatrix;
 	private Matrix operations;
 	
 	/* Note: Right equation has negative coefficients */
@@ -30,7 +31,7 @@ public class Equation {
 		for (int i = 0; i < equation.length(); i++){
 			if (equation.charAt(i) != ' '){
 				if (equation.charAt(i) == '+'){
-					compound = new Compound(strCompound);
+					compound = new Compound(strCompound, side);
 					
 					/* Invert coefficients if the side of the equation is at the right side */
 					if(side.equalsIgnoreCase("RIGHT")){
@@ -46,7 +47,7 @@ public class Equation {
 		}
 		
 		/* Get the last compound */
-		compound = new Compound(strCompound);
+		compound = new Compound(strCompound, side);
 		
 		if(side.equalsIgnoreCase("RIGHT")){
 			compound.negateCoefficients();
@@ -84,6 +85,12 @@ public class Equation {
 		matrix = new double[elements.size()][compounds.size() + 1];
 		boolean exist = false;
 		int index = 0;
+		double highest = -1;
+		double compare = 0;
+		int highestCol = 0;
+		int[] values = null;
+		int gcf = 0;
+		boolean toGCF = false;
 		
 		// Column
 		for (int i = 0; i < compounds.size() + 1; i++){
@@ -111,11 +118,117 @@ public class Equation {
 			}
 		}
 		
+		/* Eliminate the row with the highest value */
+		if (elements.size() >= compounds.size()){
+			newMatrix = new double[elements.size() - 1][compounds.size() + 1];
+			
+			for (int i = 0; i < compounds.size(); i++){
+				for (int j = 0; j < elements.size(); j++){
+					if (matrix[j][i] > highest){
+						highest = matrix[j][i];
+						highestCol = j;
+					}
+				}
+			}
+			
+			for (int i = 0; i < compounds.size() + 1; i++){
+				for (int j = 0; j < elements.size() - 1; j++){
+					if (j < highestCol){
+						newMatrix[j][i] = matrix[j][i];
+					}
+					else {
+						newMatrix[j][i] = matrix[j+1][i];
+					}
+				}
+			}
+			matrix = newMatrix;
+		}
+		
 		/* Perform Gauss Jordan Reduction */
 		operations = new Matrix(matrix);
-		operations.reduceMatrix();
+		operations.printMatrix();
+		System.out.println();
+		matrix = operations.reduceMatrix();
 		operations.printMatrix();
 		
+		/* Get the values */
+		if (elements.size() >= compounds.size()){
+			for(int i = 0; i < elements.size() - 1; i++){
+				compounds.get(i).setMultiplier(matrix[i][compounds.size()-1] * -1);
+				
+				values = new int[elements.size()-1];
+				if (compounds.get(i).getMultiplier()%1 == 0){
+					values[i] = (int) compounds.get(i).getMultiplier();
+				} else {
+					values[i] = (int) (compounds.get(i).getMultiplier() * 10);
+					toGCF = true;
+				}	
+			}
+			compounds.get(compounds.size()-1).setMultiplier(1);
+		} else {
+			for(int i = 0; i < elements.size(); i++){
+				compounds.get(i).setMultiplier(matrix[i][compounds.size()-1] * -1);
+				
+				values = new int[elements.size()];
+				if (compounds.get(i).getMultiplier()%1 == 0){
+					values[i] = (int) compounds.get(i).getMultiplier();
+				} else {
+					values[i] = (int) (compounds.get(i).getMultiplier() * 10);
+					toGCF = true;
+				}
+			}
+		}
+		
+		if (toGCF == true){
+			// Get GCF
+			for(int i = 1; i < values.length; i++){
+				if (i == 1){
+					gcf = EuclideanAlgorithm.getGCF(values[i-1], values[i]);
+				} else {
+					gcf = EuclideanAlgorithm.getGCF(gcf, values[i]);
+				}
+			}
+			
+			// Multiply to the answer
+			for(int i = 0; i < compounds.size(); i++){
+				compounds.get(i).setMultiplier(compounds.get(i).getMultiplier() * gcf);
+			}
+		}
 	}
 	
+	public String getLeftEquation(){
+		String equation = "";
+		for (int i = 0; i < compounds.size(); i++){
+			if (compounds.get(i).getSide().equalsIgnoreCase("LEFT")){
+				if (compounds.get(i).getMultiplier() == 1){
+					equation += compounds.get(i).getCompound();
+				} else {
+					equation += ((int) compounds.get(i).getMultiplier()) + compounds.get(i).getCompound();
+				}
+				if (!(compounds.get(i+1).getSide().equalsIgnoreCase("RIGHT"))){
+					equation += " + ";
+				}
+			}
+		}
+		
+		return equation;
+	}
+	
+	public String getRightEquation(){
+		String equation = "";
+		for (int i = 0; i < compounds.size(); i++){
+			if (compounds.get(i).getSide().equalsIgnoreCase("RIGHT")){
+				if (compounds.get(i).getMultiplier() == 1){
+					equation += compounds.get(i).getCompound();
+				} else {
+					equation += ((int) compounds.get(i).getMultiplier()) + compounds.get(i).getCompound();
+				}
+				if (i < compounds.size()-1){
+					equation += " + ";
+				}
+			}
+		}
+		
+		return equation;
+	}
 }
