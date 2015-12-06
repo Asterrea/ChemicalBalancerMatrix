@@ -5,6 +5,7 @@ package view;
 
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
 
@@ -24,7 +25,7 @@ public class GUI_HOME extends JPanel {
   private JTextField txtResultRight;
   private JTextArea txtAreaInstructions;
   private JButton btnGo;
-  private JToggleButton togInstructions;
+  private JButton btnInstructions;
 
   public GUI_HOME() {
       //construct components
@@ -43,7 +44,7 @@ public class GUI_HOME extends JPanel {
       txtResultRight = new JTextField (1);
       txtAreaInstructions = new JTextArea (5, 1);
       btnGo = new JButton ("GO!");
-      togInstructions = new JToggleButton ("Instructions", false);
+      btnInstructions = new JButton ("Instructions");
 
       //set components properties
       txtAreaInstructions.setEnabled (false);
@@ -68,7 +69,7 @@ public class GUI_HOME extends JPanel {
       add (txtResultRight);
       add (txtAreaInstructions);
       add (btnGo);
-      add (togInstructions);
+      add (btnInstructions);
 
       //set component bounds (only needed by Absolute Positioning)
       lblTitle.setBounds (290, 30, 195, 45);
@@ -86,7 +87,7 @@ public class GUI_HOME extends JPanel {
       txtResultRight.setBounds (505, 150, 145, 25);
       txtAreaInstructions.setBounds (40, 190, 460, 185);
       btnGo.setBounds (550, 190, 100, 25);
-      togInstructions.setBounds (40, 150, 115, 25);
+      btnInstructions.setBounds (40, 150, 115, 25);
       
       hideInstructions();
       hideBalance();
@@ -124,11 +125,34 @@ public class GUI_HOME extends JPanel {
 	  txtAreaInstructions.setVisible(false);
   }
   
+  public void showListeners(){
+	  btnBegin.addActionListener(new BalanceActionListener());
+	  btnInstructions.addActionListener(new BalanceActionListener());
+  }
+  
+  class BalanceActionListener implements ActionListener{
+
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource().equals(btnBegin)){
+			showBalance();
+			hideInstructions();
+		}
+		else if(e.getSource().equals(btnInstructions)){
+			hideBalance();
+			showInstructions();
+		}
+		
+	}
+	  
+  }
   public static void main (String[] args) {
+	  GUI_HOME gui = new GUI_HOME();
       JFrame frame = new JFrame ("ADVDISC - Chemical Equation Balancer");
       frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
-      frame.getContentPane().add (new GUI_HOME());
+      frame.getContentPane().add (gui);
       frame.pack();
       frame.setVisible (true);
+      
+      gui.showListeners();
   }
 }
